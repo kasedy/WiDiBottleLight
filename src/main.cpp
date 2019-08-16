@@ -45,11 +45,11 @@ void setup() {
   EmergencyProtocol::checkOnActivation();
   lightController = new LightController(LED_PINS, defaultEffects());
   sensorButton = AbstractCapacitiveSensorButton::create(lightController);
-  VoiceControl::setup();
   setupWifi();
   Ota::setup();
   randomSeed(ESP.getCycleCount());
   MqttProcessor::setup();
+  VoiceControl::setup();
   Debug.begin(HOSTNAME);
   WebPortal::setup();
 }

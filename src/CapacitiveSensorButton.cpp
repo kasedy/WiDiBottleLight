@@ -9,7 +9,7 @@
 
 #define NUM_SAMPLES 50
 #define PROCESSING_INTERVAL 25
-#define THRESHOLD 250
+#define THRESHOLD 350
 #define CLICK_TIME_THRESHOLD 500
 #define DOUBLE_CLICK_TIME_THRESHOLD 250
 
@@ -24,9 +24,11 @@ class CapacitiveSensorButton : public AbstractCapacitiveSensorButton {
   LightController* lightController;
   CapacitiveSensor cs;
   AverageValueCalculator<uint32_t, uint32_t> touchSensorData;
+  AverageValueCalculator<uint32_t, uint64_t> debugTouchSensorData;
   bool isPressed;
   bool startHandlingLongPress;
   uint32_t lastAverageCalculation;
+  uint32_t lastDebug;
   uint32_t lastDownTime;
   uint32_t lastUpTime;
   uint8_t rapidClickCounter;
@@ -67,8 +69,18 @@ void CapacitiveSensorButton::loop() {
     return;
   }
   touchSensorData.addMeasurement(sensorTime);
+  debugTouchSensorData.addMeasurement(sensorTime);
 
   uint32_t now = millis();
+  if (now - lastDebug >= 200) {
+    Debug.printf("min: %-4d avg: %-4d max: %-4d\n", 
+        debugTouchSensorData.minValue, 
+        debugTouchSensorData.getAverage(), 
+        debugTouchSensorData.maxValue);
+    debugTouchSensorData.reset();
+    lastDebug = now;
+  }
+
   if (now - lastAverageCalculation >= PROCESSING_INTERVAL) {
     if (touchSensorData.getCounter() == 0) {
       // DBG("Failed to get average for capacitive sensor charge time\n");
@@ -76,7 +88,6 @@ void CapacitiveSensorButton::loop() {
     }
 
     uint32_t averageSensorTime = touchSensorData.getAverage();
-    Debug.println(averageSensorTime);
     if (isPressed && averageSensorTime < THRESHOLD) {
       isPressed = false;
       startHandlingLongPress = false;
