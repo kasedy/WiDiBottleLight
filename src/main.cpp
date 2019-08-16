@@ -2,19 +2,18 @@
 #include "helpers.h"
 #include "effects.h"
 #include "LedDriver.h"
-#include "average.h"
 #include "CapacitiveSensorButton.h"
 #include "MqttProcessor.h"
 #include "ota.h"
 #include "WebPortal.h"
 #include "EmergencyProtocol.h"
 #include "VoiceControl.h"
+#include "ESPAsyncWiFiManager.h"
 
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <ArduinoOTA.h>
 #include <ResetDetector.h>
-#include <ESPAsyncWiFiManager.h>
 #include <Hash.h>
 #include <RemoteDebug.h>
 #include <ESPAsyncWebServer.h>
@@ -29,7 +28,7 @@ void setupWifi() {
   AsyncWebServer webServer(80);
   DNSServer dns;
   AsyncWiFiManager wifiManager(&webServer, &dns);
-  wifiManager.setMinimumSignalQuality(60);
+  wifiManager.setMinimumSignalQuality(40);
   wifiManager.setLoopExtraRoutine([] () {
     sensorButton->loop();
     lightController->loop();
