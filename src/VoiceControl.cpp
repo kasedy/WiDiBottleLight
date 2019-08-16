@@ -69,7 +69,7 @@ namespace VoiceControl {
 
   void VoiceControlImpl::onMqttConnect(bool sessionPresent) {
     DBG("Connected to MQTT. Session present: %d\n", sessionPresent);
-    String topicName = String(mqttUser) + F("/feeds/") + TOPIC;
+    String topicName = String(mqttUser) + F("/f/") + TOPIC;
     DBG("Subscribing: %s\n", topicName.c_str());
     mqttClient.subscribe(topicName.c_str(), 1);
   }
@@ -107,6 +107,7 @@ namespace VoiceControl {
   void setup() {
     const char *mqttUser = VOICE_CONTROL_MQTT_USER;
     const char *mqttPassord = VOICE_CONTROL_MQTT_PASSWORD;
+    DBG("MQTT login %s %s\n", mqttUser, mqttPassord);
     if (strlen(mqttUser) > 0 && strlen(mqttPassord) > 0) {
       new VoiceControlImpl(mqttUser, mqttPassord);
     }
