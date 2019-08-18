@@ -1,0 +1,40 @@
+body {
+  text-align: center;
+  font-family: verdana;
+  user-select: none
+}
+
+input,
+select {
+  outline: 0;
+  font-size: 1em;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box
+}
+
+select {
+  margin-top: 10px
+}
+
+form>* {
+  display: block;
+  margin-bottom: 15px
+}
+
+form {
+  text-align: left;
+  width: 80%;
+  display: inline-block;
+}
+
+.c {
+  text-align: center
+}
+
+input[type='checkbox'] {
+  zoom: 1.8;
+  width: auto;
+  margin: 10px;
+  vertical-align: middle
+}
