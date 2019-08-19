@@ -8,11 +8,29 @@
 #include <AsyncMqttClient.h>
 #include <ArduinoJson.h>
 
+const char *CONFIG_MQTT_PAYLOAD_ON PROGMEM = "ON"; 
+const char *CONFIG_MQTT_PAYLOAD_OFF PROGMEM = "OFF";
+
+#define MQTT_SERVER "raspberrypi.local"
+#define MQTT_PORT 1883
+
 extern LightController *lightController;
 
 namespace MqttProcessor {
   AsyncMqttClient mqttClient;
   Ticker mqttReconnectTimer;
+
+  String getCommandTopic() {
+    return String(F("homeassistant/light/")) + DEVICE_SAFE_NAME;
+  }
+
+  String getConfigTopic() {
+    return getCommandTopic() + F("/config");
+  }
+
+  String getStateTopic() {
+    return getCommandTopic() + F("/state");
+  }
 
   void connectToMqtt() {
     if (!WiFi.isConnected()) {
@@ -26,14 +44,14 @@ namespace MqttProcessor {
 
   void onMqttConnect(bool sessionPresent) {
     DBG("Connected to MQTT. Session present: %d\n", sessionPresent);
-    mqttClient.subscribe(LED_CONFIG_MQTT_TOPIC_COMMAND, 1);
+    mqttClient.subscribe(getCommandTopic().c_str(), 1);
 
     DynamicJsonDocument doc(1024);
     doc[F("schema")] = F("json");
-    doc[F("unique_id")] = HOSTNAME;
-    doc[F("name")] = DEVICE_FULL_NAME;
-    doc[F("state_topic")] = LED_CONFIG_MQTT_TOPIC_STATE;
-    doc[F("command_topic")] = LED_CONFIG_MQTT_TOPIC_COMMAND;
+    doc[F("unique_id")] = DEVICE_SAFE_NAME;
+    doc[F("name")] = DEVICE_BEAUTIFUL_NAME;
+    doc[F("state_topic")] = getStateTopic();
+    doc[F("command_topic")] = getCommandTopic();
     doc[F("brightness")] = true;
     doc[F("optimistic")] = false;
     doc[F("qos")] = 2;
@@ -53,7 +71,7 @@ namespace MqttProcessor {
     doc.clear();
 
     DBG("Sending discovery config: %s\n", output.c_str());
-    mqttClient.publish(LED_CONFIG_MQTT_TOPIC_CONFIG, 2, true, output.c_str(), output.length());
+    mqttClient.publish(getConfigTopic().c_str(), 2, true, output.c_str(), output.length());
   }
 
   void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
@@ -69,7 +87,7 @@ namespace MqttProcessor {
 
     StaticJsonDocument<JSON_OBJECT_SIZE(20)> doc;
 
-    doc[F("state")] = lightController->isOn() ? CONFIG_MQTT_PAYLOAD_ON : CONFIG_MQTT_PAYLOAD_OFF;
+    doc[F("state")] = lightController->isOn() ? FPSTR(CONFIG_MQTT_PAYLOAD_ON) : FPSTR(CONFIG_MQTT_PAYLOAD_OFF);
     doc[F("brightness")] = lightController->getLightBrightness();
     if (lightController->getCurrentAnimationIndex() != -1) {
       doc[F("effect")] = lightController->getCurrentAnimationName();
@@ -80,9 +98,9 @@ namespace MqttProcessor {
     char buffer[jsonSize + 1];
     serializeJson(doc, buffer, sizeof(buffer));
 
-    const char* topic = LED_CONFIG_MQTT_TOPIC_STATE;
-    DBG("Publishing state to %s -> %s\n", topic, buffer);
-    mqttClient.publish(topic, 2, false, buffer, jsonSize);
+    String topic = getStateTopic();
+    DBG("Publishing state to %s -> %s\n", topic.c_str(), buffer);
+    mqttClient.publish(topic.c_str(), 2, false, buffer, jsonSize);
   }
 
   void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t length, size_t index, size_t total) {
@@ -104,7 +122,7 @@ namespace MqttProcessor {
     if (doc.containsKey(F("state"))) {
       const char *state = doc[F("state")];
       DBG("State = %s\n", state);
-      if (strcmp(state, CONFIG_MQTT_PAYLOAD_ON) == 0) {
+      if (strcmp_P(state, CONFIG_MQTT_PAYLOAD_ON) == 0) {
         DBG("Switching ON\n");
         lightController->setStateOn(true);
       }
@@ -132,7 +150,7 @@ namespace MqttProcessor {
       .onConnect(onMqttConnect)
       .onDisconnect(onMqttDisconnect)
       .onMessage(onMqttMessage)
-      .setClientId(HOSTNAME)
+      .setClientId(DEVICE_SAFE_NAME)
       .setServer(MQTT_SERVER, MQTT_PORT);
     connectToMqtt();
   }

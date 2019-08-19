@@ -13,7 +13,7 @@ namespace Ota {
   }
 
   void setup() {
-    ArduinoOTA.setHostname(HOSTNAME);
+    ArduinoOTA.setHostname(DEVICE_SAFE_NAME);
     ArduinoOTA.begin();
     ArduinoOTA.onStart(onOTAStart);
   }

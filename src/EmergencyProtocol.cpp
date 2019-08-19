@@ -55,7 +55,7 @@ namespace EmergencyProtocol {
     if (!WiFi.isConnected()) {
       DBG("Opening AP mode\n");
       WiFi.mode(WIFI_AP);
-      WiFi.softAP(DEVICE_NAME);
+      WiFi.softAP(DEVICE_SAFE_NAME);
     }
     DBG("Start OTA\n");
     Ota::setup();

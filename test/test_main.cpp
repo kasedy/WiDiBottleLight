@@ -1,7 +1,5 @@
 #include <Arduino.h>
-#include <EEPROM.h>
 #include <unity.h>
-
 
 void test_basic(void) {
   //TODO: place test body here  

@@ -33,7 +33,7 @@ void setupWifi() {
     sensorButton->loop();
     lightController->loop();
   });
-  wifiManager.autoConnect(HOSTNAME);
+  wifiManager.autoConnect(DEVICE_BEAUTIFUL_NAME);
   blueLed.setHigh();
 }
 
@@ -50,7 +50,7 @@ void setup() {
   randomSeed(ESP.getCycleCount());
   MqttProcessor::setup();
   VoiceControl::setup();
-  Debug.begin(HOSTNAME);
+  Debug.begin(DEVICE_BEAUTIFUL_NAME);
   WebPortal::setup();
 }
 
