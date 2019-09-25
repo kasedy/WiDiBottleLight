@@ -11,6 +11,11 @@
 const char *CONFIG_MQTT_PAYLOAD_ON PROGMEM = "ON"; 
 const char *CONFIG_MQTT_PAYLOAD_OFF PROGMEM = "OFF";
 
+const char *STATE PROGMEM = "state";
+const char *BRIGHTNESS PROGMEM = "brightness";
+const char *EFFECT PROGMEM = "effect";
+const char *WHITE_VALUE PROGMEM = "white_value";
+
 #define MQTT_SERVER "raspberrypi.local"
 #define MQTT_PORT 1883
 
@@ -52,12 +57,12 @@ namespace MqttProcessor {
     doc[F("name")] = DEVICE_BEAUTIFUL_NAME;
     doc[F("state_topic")] = getStateTopic();
     doc[F("command_topic")] = getCommandTopic();
-    doc[F("brightness")] = true;
     doc[F("optimistic")] = false;
     doc[F("qos")] = 2;
     doc[F("retain")] = true;
-    doc[F("effect")] = lightController->getAnimationCount() > 0;
-    doc[F("white_value")] = true;
+    doc[FPSTR(BRIGHTNESS)] = true;
+    doc[FPSTR(EFFECT)] = lightController->getAnimationCount() > 0;
+    doc[FPSTR(WHITE_VALUE)] = true;
 
     if (lightController->getAnimationCount() > 0) {
       JsonArray effectList = doc.createNestedArray(F("effect_list"));
@@ -87,12 +92,12 @@ namespace MqttProcessor {
 
     StaticJsonDocument<JSON_OBJECT_SIZE(20)> doc;
 
-    doc[F("state")] = lightController->isOn() ? FPSTR(CONFIG_MQTT_PAYLOAD_ON) : FPSTR(CONFIG_MQTT_PAYLOAD_OFF);
-    doc[F("brightness")] = lightController->getLightBrightness();
+    doc[FPSTR(STATE)] = lightController->isOn() ? FPSTR(CONFIG_MQTT_PAYLOAD_ON) : FPSTR(CONFIG_MQTT_PAYLOAD_OFF);
+    doc[FPSTR(BRIGHTNESS)] = lightController->getLightBrightness();
     if (lightController->getCurrentAnimationIndex() != -1) {
-      doc[F("effect")] = lightController->getCurrentAnimationName();
+      doc[FPSTR(EFFECT)] = lightController->getCurrentAnimationName();
     }
-    doc[F("white_value")] = lightController->getAnimationSpeed();
+    doc[FPSTR(WHITE_VALUE)] = lightController->getAnimationSpeed();
 
     size_t jsonSize = measureJson(doc);
     char buffer[jsonSize + 1];
@@ -119,29 +124,29 @@ namespace MqttProcessor {
       return;
     }
 
-    if (doc.containsKey(F("state"))) {
-      const char *state = doc[F("state")];
+    if (doc.containsKey(FPSTR(STATE))) {
+      const char *state = doc[FPSTR(STATE)];
       DBG("State = %s\n", state);
       if (strcmp_P(state, CONFIG_MQTT_PAYLOAD_ON) == 0) {
         DBG("Switching ON\n");
         lightController->setStateOn(true);
       }
-      else if (strcmp(state, CONFIG_MQTT_PAYLOAD_OFF) == 0) {
+      else if (strcmp_P(state, CONFIG_MQTT_PAYLOAD_OFF) == 0) {
         DBG("Switching OFF\n");
         lightController->setStateOn(false);
       }
     }
 
-    if (doc.containsKey(F("brightness"))) {
-      lightController->setLightBrightness(doc[F("brightness")]);
+    if (doc.containsKey(FPSTR(BRIGHTNESS))) {
+      lightController->setLightBrightness(doc[FPSTR(BRIGHTNESS)]);
     }
 
-    if (doc.containsKey(F("effect"))) {
-      lightController->setAnimationByName(doc[F("effect")]);
+    if (doc.containsKey(FPSTR(EFFECT))) {
+      lightController->setAnimationByName(doc[FPSTR(EFFECT)]);
     }
 
-    if (doc.containsKey(F("white_value"))) {
-      lightController->setAnimationSpeed(doc[F("white_value")]);
+    if (doc.containsKey(FPSTR(WHITE_VALUE))) {
+      lightController->setAnimationSpeed(doc[FPSTR(WHITE_VALUE)]);
     }
   }
 
