@@ -17,12 +17,12 @@ select {
   margin-top: 10px
 }
 
-form>* {
+form > *, .form > * {
   display: block;
   margin-bottom: 15px
 }
 
-form {
+form, .form {
   text-align: left;
   width: 80%;
   display: inline-block;
@@ -37,4 +37,14 @@ input[type='checkbox'] {
   width: auto;
   margin: 10px;
   vertical-align: middle
+}
+
+button {
+  border: 0;
+  border-radius: 0.3rem;
+  background-color: #16A1E7;
+  color: #fff;
+  line-height: 2.4rem;
+  font-size: 1.2rem;
+  width: 100%;
 }

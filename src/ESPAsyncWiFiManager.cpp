@@ -112,14 +112,14 @@ void AsyncWiFiManager::setupConfigPortal() {
   setInfo();
 
   /* Setup web pages: root, wifi config pages, SO captive portal detectors and not found. */
-  server->on("/", std::bind(&AsyncWiFiManager::handleRoot, this,std::placeholders::_1)).setFilter(ON_AP_FILTER);
-  server->on("/wifi", std::bind(&AsyncWiFiManager::handleWifi, this, std::placeholders::_1,true)).setFilter(ON_AP_FILTER);
-  server->on("/0wifi", std::bind(&AsyncWiFiManager::handleWifi, this,std::placeholders::_1, false)).setFilter(ON_AP_FILTER);
-  server->on("/wifisave", std::bind(&AsyncWiFiManager::handleWifiSave,this,std::placeholders::_1)).setFilter(ON_AP_FILTER);
-  server->on("/i", std::bind(&AsyncWiFiManager::handleInfo,this, std::placeholders::_1)).setFilter(ON_AP_FILTER);
-  server->on("/r", std::bind(&AsyncWiFiManager::handleReset, this,std::placeholders::_1)).setFilter(ON_AP_FILTER);
+  server->on("/", std::bind(&AsyncWiFiManager::handleRoot, this,std::placeholders::_1));
+  server->on("/wifi", std::bind(&AsyncWiFiManager::handleWifi, this, std::placeholders::_1,true));
+  server->on("/0wifi", std::bind(&AsyncWiFiManager::handleWifi, this,std::placeholders::_1, false));
+  server->on("/wifisave", std::bind(&AsyncWiFiManager::handleWifiSave,this,std::placeholders::_1));
+  server->on("/i", std::bind(&AsyncWiFiManager::handleInfo,this, std::placeholders::_1));
+  server->on("/r", std::bind(&AsyncWiFiManager::handleReset, this,std::placeholders::_1));
   //server->on("/generate_204", std::bind(&AsyncWiFiManager::handle204, this));  //Android/Chrome OS captive portal check.
-  server->on("/fwlink", std::bind(&AsyncWiFiManager::handleRoot, this,std::placeholders::_1)).setFilter(ON_AP_FILTER);  //Microsoft captive portal. Maybe not needed. Might be handled by notFound handler.
+  server->on("/fwlink", std::bind(&AsyncWiFiManager::handleRoot, this,std::placeholders::_1));  //Microsoft captive portal. Maybe not needed. Might be handled by notFound handler.
   server->onNotFound (std::bind(&AsyncWiFiManager::handleNotFound,this,std::placeholders::_1));
   server->begin(); // Web server start
   DEBUG_WM(F("HTTP server started"));
@@ -429,7 +429,7 @@ boolean  AsyncWiFiManager::startConfigPortal(char const *apName, char const *apP
           //todo: check if any custom parameters actually exist, and check if they really changed maybe
           _savecallback();
         }
-        break;
+        // break;
       }
     } else {
       lastDisconnectedTimeStamp = millis();
