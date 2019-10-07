@@ -24,4 +24,5 @@
 
 #define LEAD_INDICATOR_PIN 2
 
-extern const char* DEVICE_SAFE_NAME;
+const char *getDeviceSafeName();
+#define DEVICE_SAFE_NAME getDeviceSafeName()

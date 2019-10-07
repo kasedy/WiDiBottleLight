@@ -1,7 +1,8 @@
 function p(el) {
   return el.type == 'checkbox' ? 'checked' : 'value';
 };
-var ws = new WebSocket("ws://" + "192.168.0.44" /*location.host*/ + "/ws"),
+var ip = new URL(location.href).searchParams.get('ip') || location.host;
+var ws = new WebSocket("ws://" + ip + "/ws"),
   form = document.forms[0];
 form.onchange = function() {
   ws.send(JSON.stringify([].reduce.call(form, function(data, el) {
