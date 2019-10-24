@@ -14,6 +14,7 @@ class SingleLedFade : public BaseAnimation {
   unsigned long lastUpdateTime;
 
   uint8_t getNextLedIndex() const;
+  uint8_t getBrightness(int led) const;
   unsigned long getUpdateInterval();
 public:
   SingleLedFade(LightController *lightController, uint8_t brightnessOverlap);
