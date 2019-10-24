@@ -18,7 +18,7 @@ void SingleLedFade::handle() {
   if (lightController->isEffectChanged()) {
     currentLed = 0;
     for (int i = 0; i < lightController->getLedCount(); ++i) {
-      lightController->setPinValue(getBrightness(i));
+      lightController->setPinValue(i, getBrightness(i));
     }
     return;
   }
@@ -33,7 +33,7 @@ void SingleLedFade::handle() {
   if (lightController->isMaxBrightensChanged()) {
     if (lightController->isOn()) {
       for (int i = 0; i < lightController->getLedCount(); ++i) {
-        lightController->setPinValue(getBrightness(i));
+        lightController->setPinValue(i, getBrightness(i));
       }
       return;
     }
