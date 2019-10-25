@@ -20,7 +20,7 @@ Effect effectFadeSingleLed() {
 }
 
 Effect effectRandomSplashes() {
-  return RandomSplashes::effect("Random splashes");
+  return RandomAsynchronousSplashes::effect("Random splashes");
 }
 
 Effect effectRandomCompensatedSplashes() {
@@ -28,7 +28,39 @@ Effect effectRandomCompensatedSplashes() {
 }
 
 Effect effectRandomBlinks() {
-  return RandomSplashes::effect("Random blinks", {{0, 0}, {255, 255}});
+  return RandomAsynchronousSplashes::effect("Random blinks", {{0, 0}, {255, 255}});
+}
+
+Effect effectAsycFire() {
+  return RandomAsynchronousSplashes::effect("Async fire", {{51, 255}});
+}
+
+Effect effectAsycFlame() {
+  return RandomAsynchronousSplashes::effect("Async flame", {{25, 255}, {51, 255}, {76, 255}, {102, 255}, {127, 255}, {51, 255}, {153, 255}, {178, 255}, {204, 255}}, 10);
+}
+
+Effect effectSyncFire() {
+  return RandomSynchronousSplashes::effect("Sync fire", {{51, 255}});
+}
+
+Effect effectSyncFlame() {
+  return RandomSynchronousSplashes::effect("Sync flame", {{25, 255}, {51, 255}, {76, 255}, {102, 255}, {127, 255}, {51, 255}, {153, 255}, {178, 255}, {204, 255}}, 10);
+}
+
+std::vector<Effect> allEffects() {
+  return std::vector<Effect>({
+    noAnimation(),
+    effectRandomCompensatedSplashes(),
+    effectFadeOnSwitch(),
+    effectFadeSingleLed(),
+    effectFadeInCycle(),
+    effectRandomSplashes(),
+    effectRandomBlinks(),
+    effectAsycFire(),
+    effectAsycFlame(),
+    effectSyncFire(),
+    effectSyncFlame(),
+  });
 }
 
 std::vector<Effect> defaultEffects() {
@@ -38,3 +70,5 @@ std::vector<Effect> defaultEffects() {
     effectFadeSingleLed(),
   });
 }
+
+#define EFFECT_LIST (allEffects())

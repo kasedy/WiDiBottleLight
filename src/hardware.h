@@ -10,7 +10,7 @@
   #define CAPACITIVE_SENSOR_RECEIVE_PIN 4
 #elif defined(HARDWARE_TEST)
   #define DEVICE_BEAUTIFUL_NAME "dev"
-  #define LED_PINS {12, 14}
+  #define LED_PINS {0, 12, 13, 14, 15, 16}
   #define LOGGING true
   #define CAPACITIVE_SENSOR_SEND_PIN 5
   #define CAPACITIVE_SENSOR_RECEIVE_PIN 4

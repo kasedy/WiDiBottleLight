@@ -12,26 +12,18 @@ public:
     uint8_t maxBrightness;
   };
 
-private:
-  struct LedInfo {
-    uint8_t brightnessSettingsIndex;
-    unsigned long timeToChangeBrightness;
-  };
-
-  LedInfo *ledInfo;
-  std::vector<BrightnessSettings> brightnessSettings;
-
-  unsigned long getUpdateInterval();
-  void resetTimers(unsigned long timeToChangeBrightness);
-
-public:
-  RandomSplashes(LightController *lightController);
+  RandomSplashes(LightController *lightController, int8_t speed = 0);
   RandomSplashes(
     LightController *lightController, 
-    std::vector<BrightnessSettings> brightnessSettings);
+    std::vector<BrightnessSettings> brightnessSettings, 
+    int8_t speed = 0);
   virtual ~RandomSplashes();
-  virtual void handle() override;
 
-  static Effect effect(const char* name);
-  static Effect effect(const char* name, std::vector<BrightnessSettings> brightnessSettings);
+private:
+  int8_t speed; // each unit increases (or decreases if negative) speed by 10%
+
+protected:
+  std::vector<BrightnessSettings> brightnessSettings;
+  unsigned long getUpdateInterval();
+  void setLedBrightness(uint8_t index, BrightnessSettings brigtnessRange);
 };

@@ -43,7 +43,7 @@ void setup() {
   Serial.setDebugOutput(true);
 #endif 
   EmergencyProtocol::checkOnActivation();
-  lightController = new LightController(LED_PINS, defaultEffects());
+  lightController = new LightController(LED_PINS, EFFECT_LIST);
   sensorButton = AbstractCapacitiveSensorButton::create(lightController);
   setupWifi();
   Ota::setup();
