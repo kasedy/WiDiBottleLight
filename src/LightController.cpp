@@ -19,7 +19,7 @@ LightController::LightController(const std::vector<PinStatus> &pinsGpio, const s
     for (int gpio : pins[i].gpio) {
       DBG("Set pin %d to output\n", gpio);
       pinMode(gpio, OUTPUT);
-      setPinValue(i, pins[i].brightness);
+      setPinValue(i, 0);
     }
   }
   if (effects.empty()) {
