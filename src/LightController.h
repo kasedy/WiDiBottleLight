@@ -7,8 +7,8 @@
 
 class LightController {
   struct PinStatus {
-    PinStatus(uint8_t gpio) : gpio(1, gpio), brightness(255) {}
-    PinStatus(std::initializer_list<uint8_t> gpio) : gpio(gpio), brightness(255) {}
+    PinStatus(uint8_t gpio) : gpio(1, gpio), brightness(0) {}
+    PinStatus(std::initializer_list<uint8_t> gpio) : gpio(gpio), brightness(0) {}
     const std::vector<uint8_t> gpio;
     uint8_t brightness;
   };
