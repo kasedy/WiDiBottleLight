@@ -21,7 +21,6 @@
 
 LightController *lightController;
 AbstractCapacitiveSensorButton* sensorButton;
-LightState lightState(LED_PINS);
 RemoteDebug Debug;
 
 void setupWifi() {
@@ -45,7 +44,6 @@ void setup() {
   Serial.setDebugOutput(true);
 #endif 
   EmergencyProtocol::checkOnActivation();
-  lightState.setup();
   lightController = new LightController(LED_PINS, EFFECT_LIST);
   sensorButton = AbstractCapacitiveSensorButton::create(lightController);
   setupWifi();
