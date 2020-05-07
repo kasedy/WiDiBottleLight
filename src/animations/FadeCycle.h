@@ -15,9 +15,9 @@ class FadeCycle : public BaseAnimation {
   unsigned long getUpdateInterval();
 
 public:
+  constexpr static uint8_t pinsRequires = 1;
+
   FadeCycle(LightController *lightController);
   virtual ~FadeCycle();
   virtual void handle() override;
-
-  static Effect effect(const char* name);
 };

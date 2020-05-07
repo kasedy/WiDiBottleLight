@@ -94,7 +94,3 @@ unsigned long SingleLedFade::getUpdateInterval() {
   } 
   return refreshInterval;
 }
-
-Effect SingleLedFade::effect(const char* name, uint8_t brightnessOverlap) {
-  return {name, [=] (LightController *lightController) -> BaseAnimation* { return new SingleLedFade(lightController, brightnessOverlap); }, 2};
-}

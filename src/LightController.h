@@ -52,8 +52,8 @@ public:
   void setPinValue(uint8_t pinIndex, uint8_t brightness);
   void setAllPinValue(uint8_t brightness);
   uint8_t getLedBrightness(uint8_t pinIndex) const;
-
   uint8_t getLedCount() const;
+
   bool isMaxBrightensChanged() const;
   bool isStateOnChanged() const;
   bool isEffectChanged() const;
