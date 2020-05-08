@@ -72,7 +72,7 @@ Effect effectSyncFlame() {
     10);
 }
 
-std::vector<Effect> allEffects() {
+inline std::vector<Effect> allEffects() {
   return std::vector<Effect>({
     noAnimation(),
     effectRandomCompensatedSplashes(),
@@ -88,7 +88,7 @@ std::vector<Effect> allEffects() {
   });
 }
 
-std::vector<Effect> defaultEffects() {
+inline std::vector<Effect> defaultEffects() {
   return std::vector<Effect>({
     effectRandomCompensatedSplashes(),
     effectFadeOnSwitch(),
@@ -96,4 +96,9 @@ std::vector<Effect> defaultEffects() {
   });
 }
 
-#define EFFECT_LIST (allEffects())
+#define effectList allEffects
+
+inline std::vector<Effect> deviceCompatibleEffects(size_t numberLines, const std::vector<Effect> &effects = effectList()) {
+  auto predicate = [=](const Effect &e){ return numberLines >= e.pinsRequires; };
+  return filter_vector(effects, predicate);
+}

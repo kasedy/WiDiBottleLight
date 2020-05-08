@@ -10,6 +10,7 @@
 #include "VoiceControl.h"
 #include "ESPAsyncWiFiManager.h"
 #include "LightState.h"
+#include "DeviceState.h"
 
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
@@ -21,6 +22,8 @@
 
 LightController *lightController;
 AbstractCapacitiveSensorButton* sensorButton;
+LightState *lightState;
+DeviceState *deviceState;
 RemoteDebug Debug;
 
 void setupWifi() {
@@ -44,7 +47,9 @@ void setup() {
   Serial.setDebugOutput(true);
 #endif 
   EmergencyProtocol::checkOnActivation();
-  lightController = new LightController(LED_PINS, EFFECT_LIST);
+  lightController = new LightController(LED_PINS, effectList());
+  lightState = new LightState(LED_PINS);
+  deviceState = new DeviceState(deviceCompatibleEffects(lightState->getLedCount()));
   sensorButton = AbstractCapacitiveSensorButton::create(lightController);
   setupWifi();
   Ota::setup();

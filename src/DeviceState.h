@@ -15,10 +15,10 @@ bool updateField(T& current, const T& newValue) {
 
 class DeviceState {
   const std::vector<Effect> effects;
-  BaseAnimation *currentAnimation;
-  uint8_t currentAnimationIndex;
-  uint8_t lightBrightness;
-  uint8_t animationSpeed;
+  BaseAnimation *currentAnimation = nullptr;
+  uint8_t currentAnimationIndex = -1;
+  uint8_t lightBrightness = 255;
+  uint8_t animationSpeed = 255 / 2;
   bool stateOn:1;
  
   bool effectChanged:1;
@@ -27,6 +27,8 @@ class DeviceState {
   bool stateOnChanged:1;
 
 public:
+  DeviceState(const std::vector<Effect>& effects);
+
   inline size_t getAnimationCount() const { return effects.size(); }
   inline uint8_t getCurrentAnimationIndex() const { return currentAnimationIndex; }
   inline const char* getAnimationName(size_t index) const { return effects[index].name; }

@@ -12,13 +12,16 @@ class LightState {
 
   std::vector<LineState> lightLanes;
 public:
-  inline LightState(const std::vector<LineState> &pinsGpio) : lightLanes(pinsGpio) {}
-
-  void setup();
+  inline LightState(const std::vector<LineState> &pinsGpio) : lightLanes(pinsGpio) {
+    setup();
+  }
 
   inline uint8_t getLedCount() const { return lightLanes.size(); }
   inline uint8_t getLedBrightness(uint8_t pinIndex) const { return lightLanes[pinIndex].brightness; }
 
    void setPinValue(uint8_t pinIndex, uint8_t brightness);
    void setAllPinValue(uint8_t brightness);
+
+private:
+  void setup();
 };

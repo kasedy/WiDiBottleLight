@@ -1,5 +1,16 @@
 #include "DeviceState.h"
 
+#include "animations/NoAnimation.h"
+
+DeviceState::DeviceState(const std::vector<Effect>& effects) :
+    effects(effects) {
+  if (effects.empty()) {
+    currentAnimation = new NoAnimation(nullptr);
+  } else {
+    setAnimationByIndex(0);
+  }
+}
+
 void DeviceState::nextAnimation() {
   uint8_t animationIndex = getCurrentAnimationIndex();
   if (++animationIndex >= effects.size()) {
